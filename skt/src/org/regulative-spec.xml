@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<regulative-spec
+	xmlns="https://github.com/gavelproject/gavel"
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+	xsi:schemaLocation="https://github.com/gavelproject/gavel
+	https://raw.githubusercontent.com/gavelproject/gavel/master/src/main/resources/xsd/regulative-spec.xsd">
+	
+	<norms>
+		<norm id="n1">
+			<activation>pool_member(Player)</activation>
+			<issuer>manager</issuer>
+			<target>Player</target>
+			<deactivation>false</deactivation>
+			<deadline>pool_status("FINISHED")</deadline>
+			<content>obligation(contribution(Player,1))</content>
+		</norm>
+	</norms>
+	<sanctions>
+		<sanction id="punishment">
+			<activation>
+				current_round(Round) &amp;
+				not .my_name(Target) &amp;
+				cost_to_punish(Cost) &amp;
+				tokens(Tokens) &amp;
+				Cost &lt;= Tokens
+			</activation>
+			<category>
+				<purpose>punishment</purpose>
+				<issuer>formal</issuer>
+				<locus>other_directed</locus>
+				<mode>direct</mode>
+				<polarity>negative</polarity>
+				<discernability>noticeable</discernability>
+			</category>
+			<content>punish(Target)</content>
+		</sanction>
+		<sanction id="gossip">
+			<activation>
+				not gossips_credit(0) &amp;
+				not .my_name(Target) &amp;
+				not players_in_other_groups([]) &amp;
+				overall_img(Target,Img) &amp;
+				min_img_cooperator(MinCoop) &amp;
+				Img &lt; MinCoop
+			</activation>
+			<category>
+				<purpose>punishment</purpose>
+				<issuer>informal</issuer>
+				<locus>other_directed</locus>
+				<mode>direct</mode>
+				<polarity>negative</polarity>
+				<discernability>unnoticeable</discernability>
+			</category>
+			<content>gossip(Target,Img)</content>
+			</sanction>
+		</sanctions>
+	<ns-links>
+		<ns-link>
+			<nid>n1</nid>
+			<sid>punishment</sid>
+		</ns-link>
+		<ns-link>
+			<nid>n1</nid>
+			<sid>gossip</sid>
+		</ns-link>
+	</ns-links>
+</regulative-spec>

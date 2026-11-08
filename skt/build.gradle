@@ -1,0 +1,74 @@
+defaultTasks 'run'
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+version '1.0'
+group   'org.jacamo'
+
+sourceCompatibility = '21'
+targetCompatibility = '21'
+
+eclipse {
+	project {
+		file {
+			withXml {
+				xmlProvider->
+					def projectDescription = xmlProvider.asNode()
+					def xmlParser = new XmlParser()
+					def builders = projectDescription.buildSpec[0]
+					def jacamoBuilder = xmlParser.createNode(builders, 'buildCommand', [:])
+					xmlParser.createNode(jacamoBuilder, 'name', [:]).setValue('jacamoide.jacamoBuilder')
+					xmlParser.createNode(jacamoBuilder, 'arguments', [:]);
+
+				def natures = projectDescription.natures[0]
+				def jacamoNature = xmlParser.createNode(null, 'nature', [:])
+				jacamoNature.setValue('jacamoide.jacamoNature');
+				natures.children().add(0, jacamoNature)
+			}
+		}
+	}
+}
+
+
+repositories {
+	maven { url "https://raw.githubusercontent.com/jacamo-lang/mvn-repo/master" }
+    maven { url "https://repo.gradle.org/gradle/libs-releases" }
+
+    flatDir { dirs 'lib' }
+
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+// jacamo:1.3.0
+// npl:0.6.1 test that
+
+dependencies {
+    //implementation 'org.jacamo:jacamo:latest.integration'
+	implementation 'org.jacamo:jacamo:1.3.0'
+	//implementation 'org.jacamo:jacamo:1.3.0'
+	implementation 'org.jacamo:npl:0.6.1'
+	implementation 'org.json:json:20240303'
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/agt','src/env','src/org','src/int']
+		}
+	}
+}
+
+task run (type: JavaExec, dependsOn: 'classes') {
+	description 'runs the application'
+	main = 'jacamo.infra.JaCaMoLauncher'
+	args 'skt.jcm'
+	classpath sourceSets.main.runtimeClasspath
+	enableAssertions=true
+}
+
+clean {
+	delete 'bin'
+	delete 'build'
+}

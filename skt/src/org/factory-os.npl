@@ -1,0 +1,45 @@
+scope main {
+  norm n_complete_assembly: finished(Order) & play(Inspector, quality_inspector, Group)
+    -> obligation(Inspector, true, all_stations_visited(Order), `5 seconds`)
+      if fulfilled: srs1(Order, 5)
+      if unfulfilled: srs2(Order, 5)
+    .
+
+  norm n_max_duration: finished(Order) & play(Inspector, quality_inspector, Group)
+    -> obligation(Inspector, true, finished_within_time(Order), `5 seconds`)
+      if fulfilled: srs1(Order, 5)
+      if unfulfilled: srs2(Order, 5)
+    .
+
+  norm n_content_correct: finished(Order) & play(Inspector, quality_inspector, Group)
+    -> obligation(Inspector, true, content_correct(Order), `5 seconds`)
+      if fulfilled: srs1(Order, 5)
+      if unfulfilled: srs2(Order, 5)
+    .
+
+  norm n_energy_budget: finished(Order) & play(Inspector, quality_inspector, Group)
+    -> obligation(Inspector, true, energy_within_budget(Order), `5 seconds`)
+      if fulfilled: srs1(Order, 5)
+      if unfulfilled: srs2(Order, 5)
+    .
+
+  norm n_builder_builds: due(Order, build) & scheme_builder(Order, Builder)
+    -> obligation(Builder, true, goal_done(Order, build), `1 second`)
+      if fulfilled: srs1(Order, 5)
+      if unfulfilled: srs2(Order, 5)
+    .
+
+  norm n_inspector_inspects: due(Order, inspect) & play(Inspector, quality_inspector, Group)
+    -> obligation(Inspector, true, goal_done(Order, inspect), `1 second`)
+      if fulfilled: srs1(Order, 5)
+      if unfulfilled: srs2(Order, 5)
+    .
+
+  sanction-rule srs1(Order, X) {
+    -> sanction(Order, increase(X)).
+  }
+
+  sanction-rule srs2(Order, X) {
+    -> sanction(Order, decrease(X)).
+  }
+}

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<regulative-spec
+	xmlns="https://github.com/gavelproject/gavel"
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:schemaLocation="https://github.com/gavelproject/gavel
+	https://raw.githubusercontent.com/gavelproject/gavel/master/src/main/resources/xsd/regulative-spec.xsd">
+
+	<norms>
+		<!-- Every started assembly must eventually visit all 4 stations. -->
+		<norm id="n_complete_assembly">
+			<activation>assembling(Skateboard)</activation>
+			<issuer>quality_control</issuer>
+			<target>Skateboard</target>
+			<deactivation>false</deactivation>
+			<deadline>order_status("FINISHED")</deadline>
+			<content>obligation(all_stations_visited)</content>
+		</norm>
+
+		<!-- The order must be finished in a reasonable time -->
+		<norm id="n_max_duration">
+			<activation>assembling(Skateboard)</activation>
+			<issuer>quality_control</issuer>
+			<target>Skateboard</target>
+			<deactivation>false</deactivation>
+			<deadline>order_status("FINISHED")</deadline>
+			<content>obligation(finished_within_time)</content>
+		</norm>
+
+		<!-- The finished content of each order must be correct
+			Expand for for each type of wrong content -->
+		<norm id="n_content_correct">
+			<activation>assembling(Skateboard)</activation>
+			<issuer>quality_control</issuer>
+			<target>Skateboard</target>
+			<deactivation>false</deactivation>
+			<deadline>order_status("FINISHED")</deadline>
+			<content>obligation(content_correct)</content>
+		</norm>
+		
+
+		<!-- Each Station Pass must meet its own requiriments -->
+		<norm id="n_station_requirements_met">
+			<activation>assembling(Skateboard)</activation>
+			<issuer>quality_control</issuer>
+			<target>Skateboard</target>
+			<deactivation>false</deactivation>
+			<deadline>order_status("FINISHED")</deadline>
+			<content>obligation(all_station_requirements_met)</content>
+		</norm>
+	</norms>
+
+	<sanctions>
+		<sanction id="flag_rework">
+			<activation>true</activation>
+			<category>
+				<purpose>guidance</purpose>
+				<issuer>formal</issuer>
+				<locus>other_directed</locus>
+				<mode>direct</mode>
+				<polarity>negative</polarity>
+				<discernability>noticeable</discernability>
+			</category>
+			<content>flag_for_rework(Target)</content>
+		</sanction>
+
+		<sanction id="notify_supervisor">
+			<activation>true</activation>
+			<category>
+				<purpose>punishment</purpose>
+				<issuer>formal</issuer>
+				<locus>other_directed</locus>
+				<mode>direct</mode>
+				<polarity>negative</polarity>
+				<discernability>noticeable</discernability>
+			</category>
+			<content>notify_supervisor(Target)</content>
+		</sanction>
+
+		<sanction id="log_quality_metric">
+			<activation>true</activation>
+			<category>
+				<purpose>guidance</purpose>
+				<issuer>formal</issuer>
+				<locus>other_directed</locus>
+				<mode>indirect</mode>
+				<polarity>negative</polarity>
+				<discernability>unnoticeable</discernability>
+			</category>
+			<content>log_quality_metric(Target)</content>
+		</sanction>
+	</sanctions>
+
+	<ns-links>
+		<ns-link>
+			<nid>n_complete_assembly</nid>
+			<sid>flag_rework</sid>
+		</ns-link>
+		<ns-link>
+			<nid>n_complete_assembly</nid>
+			<sid>notify_supervisor</sid>
+		</ns-link>
+		<ns-link>
+			<nid>n_safety_before_final</nid>
+			<sid>flag_rework</sid>
+		</ns-link>
+		<ns-link>
+			<nid>n_max_duration</nid>
+			<sid>log_quality_metric</sid>
+		</ns-link>
+		<ns-link>
+			<nid>n_content_correct</nid>
+			<sid>flag_rework</sid>
+		</ns-link>
+	</ns-links>
+</regulative-spec>

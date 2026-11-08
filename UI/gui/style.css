@@ -1,0 +1,226 @@
+body {
+  font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #1c1c1e;
+  color: #eaeaea;
+  margin: 0;
+  padding: 24px;
+}
+
+h1 { font-weight: 500; margin-bottom: 20px; }
+h2 { font-weight: 500; font-size: 16px; margin: 24px 0 12px; }
+
+.factory-floor {
+  position: relative;
+  width: 940px;
+  height: 560px;
+  margin: 0 auto 24px;
+}
+
+#stations { overflow-x: auto; }
+
+.floor-controls {
+  display: flex; align-items: center; gap: 18px;
+  margin: 0 0 10px; font-size: 12px; color: #bbb;
+}
+.floor-controls select {
+  background: #2a2a2d; color: #eaeaea; border: 1px solid #555; border-radius: 4px; padding: 2px 4px;
+}
+.floor-controls .hint { color: #777; }
+
+.floor-box.processing {
+  background: #3a2f10;
+  transition: background 0.3s;
+}
+
+.station-queue-count {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  font-size: 10px;
+  color: #999;
+}
+.station-queue-count b { font-size: 12px; color: #ddd; }
+.station-flags {
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  font-size: 10px;
+  color: #ff9d5c;
+}
+.queue-caption {
+  position: absolute;
+  top: 70px;
+  left: 8px;
+  right: 8px;
+  padding-top: 2px;
+  border-top: 1px dashed #3a3a3d;
+  font-size: 10px;
+  color: #666;
+}
+.st-inst {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 7px;
+  border-radius: 8px;
+  color: #1c1c1e;
+  font-weight: 700;
+}
+
+.chip-group { display: inline-flex; align-items: center; gap: 1px; margin-right: 4px; }
+.chip-station-label {
+  padding: 2px 5px; border-radius: 5px 0 0 5px;
+  font-weight: 600; background: #333; color: #ccc;
+}
+.phase-chip { padding: 2px 6px; font-size: 10px; font-weight: 700; color: #1c1c1e; }
+.phase-chip:last-child { border-radius: 0 5px 5px 0; }
+.phase-chip.done { background: #8fd88f; }
+.phase-chip.current { background: #e0b84a; box-shadow: 0 0 0 1px #caa23a; }
+.phase-chip.pending { background: #444; color: #777; }
+
+.station-icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke-width: 4;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.floor-box {
+  position: absolute;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: #232326;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.floor-box.busy-glow {
+  border-color: #caa23a;
+  box-shadow: 0 0 10px rgba(202, 162, 58, 0.5);
+}
+.station-box-label {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 13px;
+  color: #ccc;
+  font-weight: 500;
+}
+
+/* Empty (far left) and Finished (far right): tall boxes, skates stack in two columns */
+.ef-box { background: #202023; border-style: dashed; }
+.ef-label {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 13px;
+  color: #999;
+  font-weight: 500;
+}
+.ef-empty-box { border-top-color: #777; border-top-width: 3px; }
+.ef-finished-box { border-top-color: #7ee08a; border-top-width: 3px; }
+
+.skate-sprite {
+  position: absolute;
+  z-index: 10;
+  width: 70px;
+  height: 35px;
+  cursor: pointer;
+  /* --move-ms is set from the "Animation" selector (default: slow) */
+  transition: left var(--move-ms, 2000ms) ease-in-out, top var(--move-ms, 2000ms) ease-in-out;
+}
+.skate-sprite .skate-svg { width: 100%; height: 100%; }
+
+.skate-svg .part { transform-box: fill-box; transform-origin: center; }
+@keyframes partPop {
+  0% { opacity: 0; transform: scale(0.3); }
+  60% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.part.part-pop { animation: partPop 0.5s ease-out forwards; }
+
+.mini-skate { display: inline-block; vertical-align: middle; margin-left: 8px; }
+.mini-skate .skate-svg { width: 60px; height: 30px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #333; }
+th { color: #a0a0a0; font-weight: 500; }
+
+.badge { padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+.badge.ok { background: #1e3d24; color: #7ee08a; }
+.badge.bad { background: #402020; color: #ff8080; }
+.badge.unknown { background: #333; color: #aaa; }
+
+.path-cell { white-space: nowrap; font-size: 12px; }
+.chip {
+  display: inline-block; padding: 2px 7px; border-radius: 5px;
+  font-weight: 600; background: #333; color: #ccc; margin-bottom: 2px;
+}
+.chip.done { background: #2b3d2b; color: #8fd88f; }
+.chip.current { background: #3a2f10; color: #e0b84a; box-shadow: 0 0 0 1px #caa23a; }
+.arrow { color: #666; margin: 0 3px; }
+
+.detail-row td {
+  padding: 3px 10px 3px 24px;
+  font-size: 11px;
+  color: #999;
+  background: #1c1c1e;
+  border-bottom: 1px solid #2a2a2c;
+}
+.detail-row:last-of-type td { border-bottom: 1px solid #333; }
+.detail-label { font-weight: 600; color: #777; width: 70px; }
+/* messages that sit next to the data they are about */
+.problem { color: #ff8080; font-size: 12px; }
+.muted { color: #888; font-size: 11px; }
+.meter { display: inline-block; width: 90px; height: 7px; background: #2a2a2a; border-radius: 4px; vertical-align: middle; margin-right: 6px; overflow: hidden; }
+.meter-fill { display: block; height: 100%; }
+.meter-fill.ok { background: #4caf63; }
+.meter-fill.bad { background: #e05555; }
+.station-effects { position: absolute; top: 21px; left: 10px; font-size: 9px; color: #999; }
+.station-energy { position: absolute; top: 21px; right: 8px; font-size: 10px; color: #e6c95c; }
+.station-effects.degraded, .station-energy.degraded { color: #ff9d5c; font-weight: 600; }
+
+/* --- Travel lines ---
+   One arrow per move, drawn while the skate slides (same duration and easing as the sprite), then it lingers and fades.
+   Moves between zones (station <-> station, Empty, Finished) are thick; moves inside one station are thin. */
+.travel-layer {
+  position: absolute; left: 0; top: 0;
+  z-index: 5;               /* above the boxes, below the skates */
+  pointer-events: none; overflow: visible;
+}
+.travel-seg { animation: travelFade 1.5s linear var(--fade-delay, 5s) forwards; }
+.travel-line {
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;       /* pathLength="1": the whole line is one dash */
+  animation: travelDraw var(--dur, 2000ms) ease-in-out forwards;
+}
+.travel-head { opacity: 0; animation: headIn 0.15s linear var(--dur, 2000ms) forwards; }
+@keyframes travelDraw { to { stroke-dashoffset: 0; } }
+@keyframes headIn { to { opacity: 1; } }
+@keyframes travelFade { to { opacity: 0; } }
+
+.route-line { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 7 6; animation: routeFlow 0.8s linear infinite; }
+@keyframes routeFlow { to { stroke-dashoffset: -13; } }
+.route-dot text { font-size: 10px; font-weight: 700; fill: #111; text-anchor: middle; dominant-baseline: central; }
+
+/* --- Dashboard --- */
+.dashboard h2 { display: flex; align-items: baseline; gap: 18px; }
+.dash-controls { font-size: 12px; font-weight: 400; color: #bbb; }
+.dash-controls select { background: #2a2a2d; color: #eaeaea; border: 1px solid #555; border-radius: 4px; padding: 2px 4px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.kpi { background: #232326; border: 1px solid #333; border-top: 3px solid #555; border-radius: 6px; padding: 8px 10px; }
+.kpi-label { font-size: 11px; color: #999; }
+.kpi-value { font-size: 22px; font-weight: 600; margin: 2px 0; }
+.kpi-pct { font-size: 14px; font-weight: 500; color: #bbb; }
+.kpi-sub { font-size: 11px; color: #777; }
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 12px; margin-bottom: 8px; }
+.chart-card { background: #232326; border: 1px solid #333; border-radius: 6px; padding: 8px 10px 4px; }
+.chart-title { font-size: 13px; color: #ddd; margin-bottom: 2px; }
+.chart-svg { width: 100%; height: auto; display: block; }
+.chart-note { font-size: 11px; color: #777; padding: 0 0 4px 4px; }

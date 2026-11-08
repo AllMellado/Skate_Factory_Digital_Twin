@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Organisational specification (Moise) of the skateboard factory.
+
+  Roles are handed out like this: org_manager AUTHORISES an agent for a role and
+  then asks it (achieve adopt_role) to adopt it. The agent runs Moise's own
+  adoptRole; the guarded group board (SecureGroupBoard) refuses any adoption the
+  manager did not authorise, and Moise itself enforces what is written below
+  (known roles, min/max cardinality, role compatibility).
+-->
+<organisational-specification id="factory_os" os-version="0.8"
+    xmlns="http://moise.sourceforge.net/os"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://moise.sourceforge.net/os http://moise.sourceforge.net/xml/os.xsd">
+
+  <structural-specification>
+    <role-definitions>
+      <role id="org_manager"/>        <!-- authorises roles, owns the organisation -->
+      <role id="intake_clerk"/>       <!-- may admit new orders (skate_creator, order_intake) -->
+      <role id="order_builder"/>      <!-- a skateboard agent; one per order, only for its own order -->
+      <role id="quality_inspector"/>  <!-- may assert norm facts, i.e. complete norms -->
+      <role id="regulator"/>          <!-- may amend the regulation (scenario skt_regulation.jcm) -->
+    </role-definitions>
+
+    <group-specification id="factory_group">
+      <roles>
+        <role id="org_manager"      min="1" max="1"/>
+        <role id="quality_inspector" min="1" max="1"/>
+        <role id="intake_clerk"     min="1" max="2"/>
+        <role id="order_builder"    min="0" max="100000"/>
+        <role id="regulator"        min="0" max="1"/>
+      </roles>
+      <!-- No <compatibility>: an agent can play only one of these roles, so a
+           skateboard can never also be inspector or manager. -->
+    </group-specification>
+  </structural-specification>
+
+  <functional-specification>
+    <!-- One scheme instance per order. The builder commits to mBuild and achieves "build" when the
+         skateboard is finished; the inspector then commits to mInspect and achieves "inspect". -->
+    <scheme id="order_scheme">
+      <goal id="fulfil_order">
+        <plan operator="sequence">
+          <goal id="build"/>
+          <goal id="inspect"/>
+        </plan>
+      </goal>
+      <mission id="mBuild"   min="1" max="1"><goal id="build"/></mission>
+      <mission id="mInspect" min="1" max="1"><goal id="inspect"/></mission>
+    </scheme>
+  </functional-specification>
+
+  <normative-specification>
+    <!-- Permissions, not obligations: what Moise needs here is mission_permission (an agent may only commit to a mission its role is
+         permitted), which a permission gives. The duties (build / inspect the order by its deadline) are the NPL norms
+         n_builder_builds and n_inspector_inspects in factory-os.npl. As obligations, Moise generates a maintenance condition "not ..."
+         for them that NPLFactory misreads as a norm id and warns about at every scheme:
+         "The maintenance condition of norm nBuild seems to point to a norm id (not ) that does not exit". -->
+    <norm id="nBuild"   type="permission" role="order_builder"      mission="mBuild"/>
+    <norm id="nInspect" type="permission" role="quality_inspector"  mission="mInspect"/>
+  </normative-specification>
+</organisational-specification>

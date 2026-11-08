@@ -1,0 +1,20 @@
+// Scenario "regulation adaptation": R1 -> violations and sanctions -> regulator derives R2 -> regimentation / deterrence.
+// Run with  -Dskt.regulation=1  (see experiments/run_regulation_scenario.py and SCENARIO_REGULATION.md).
+mas skt_regulation {
+	agent org_manager
+	agent order_intake
+	agent twin_runner
+	agent skate_creator
+	agent quality_control
+	agent regulator
+
+	platform:	startWebMindInspector("false")
+				startWebEnvInspector("false")
+				startWebOrgInspector("false")
+
+	asl-path: "."
+              "src/agt"
+              "src/agt/inc"
+              "src/test/agt"
+              "src/test/inc"
+}

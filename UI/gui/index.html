@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Skate Factory Digital-Twin</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Skate Factory Digital-Twin</h1>
+  <div class="floor-controls">
+    <label><input type="checkbox" id="opt-lines" checked> Travel lines</label>
+    <label>Animation
+      <select id="opt-speed">
+        <option value="slow">Slow</option>
+        <option value="normal">Normal</option>
+        <option value="fast">Fast</option>
+      </select>
+    </label>
+    <span class="hint">Hover a skate to see its whole route</span>
+  </div>
+  <div id="stations"></div>
+
+  <div class="panel dashboard" id="dashboard">
+    <h2>Dashboard
+      <label class="dash-controls">Time window
+        <select id="dash-window">
+          <option value="all">All</option>
+          <option value="5m">Last 5 min</option>
+          <option value="1m">Last 1 min</option>
+        </select>
+      </label>
+    </h2>
+    <div class="kpis" id="dash-kpis"></div>
+    <div class="charts" id="dash-charts"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Orders</h2>
+    <table id="orders-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Client</th><th>Path</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="orders-body"></tbody>
+    </table>
+  </div>
+  
+  <script src="/dashboard.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

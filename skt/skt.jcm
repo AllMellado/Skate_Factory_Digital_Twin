@@ -1,0 +1,24 @@
+mas skt {
+	agent org_manager
+
+	agent order_intake
+
+	agent twin_runner
+
+	agent skate_creator
+
+	agent quality_control
+
+	platform:	startWebMindInspector("false")
+				startWebEnvInspector("false")
+                startWebOrgInspector("false")
+
+	asl-path: "."
+              "src/agt"
+              "src/agt/inc"
+              "src/test/agt"
+              "src/test/inc"
+          	  "$jacamo/src/templates"
+              "$jacamo/test/jacamo/inc"
+              "$jason/test/jason/inc"
+}
