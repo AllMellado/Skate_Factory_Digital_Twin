@@ -20,6 +20,8 @@ Then open <http://localhost:8088> to watch the factory and place orders.
 
 ## Main agents
 
+<img width="766" height="345" alt="skateboard_factory(1)" src="https://github.com/user-attachments/assets/4813b26d-1c14-4cce-b59f-c5caf15f5413" />
+
 | Agent | What it does |
 |---|---|
 | `twin_runner` | Builds the factory (stations, storages, policies) and starts the other agents. |
